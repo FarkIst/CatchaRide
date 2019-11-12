@@ -6,8 +6,20 @@ using UnityEngine;
 public class LocationHandler : MonoBehaviour
 {
     private PermissionHandler _permissionHandler;
-    double longitude, latitude;
+    double _longitude, _latitude;
 
+
+    public double Longitude
+    {
+        get { return _longitude; }
+        set { _longitude = value; }
+    }
+
+    public double Latitude
+    {
+        get { return _latitude; }
+        set { _latitude = value; }
+    }
 
     private void Start()
     {
@@ -15,8 +27,8 @@ public class LocationHandler : MonoBehaviour
         _permissionHandler.PromptLocationPermissionRequest();
 
         //Debug
-        longitude = 12.462724;
-        latitude = 55.638539;
+        _longitude = 12.462724;
+        _latitude = 55.638539;
     }
 
     IEnumerator GetLocation()
@@ -56,8 +68,8 @@ public class LocationHandler : MonoBehaviour
         else
         {
             // Access granted and location value could be retrieved
-            latitude = Input.location.lastData.latitude;
-            longitude = Input.location.lastData.longitude;
+            Latitude = Input.location.lastData.latitude;
+            Longitude = Input.location.lastData.longitude;
 
         }
 
@@ -67,7 +79,7 @@ public class LocationHandler : MonoBehaviour
 
     public void SendPosition()
     {
-        Application.OpenURL("https://www.google.com/maps/dir/?api=1&" + latitude + ","+ longitude);
+        Application.OpenURL("https://www.google.com/maps/dir/?api=1&origin=" + _latitude + ","+ _longitude + "&destination=" + "55.644739," + "12.226624");
 
     }
 }
