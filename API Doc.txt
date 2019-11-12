@@ -1,0 +1,112 @@
+﻿CatchaRide API Doc
+
+
+
+POST /book
+
+Endpoint called by the client to make a ride offer for the drivers
+
+request:
+{ 
+name: String,
+coordinates:
+{
+		latitude: Double,
+		longitude: Double,
+}
+}
+
+response:
+{
+id: Int
+}
+
+GET /book/{id}
+
+Endpoint called by the client to check if a driver has selected his ride offer and wants to pick him up
+
+{
+	acceptedByDriver: Pending/Declined
+}
+or
+response:
+{
+	acceptedByDriver: Accepted
+	name: String (Driver’s name),
+distance: String (i.e. 2km, distance to driver)
+}
+
+
+
+
+
+POST /book/{id}
+
+Endpoint used by the client to give a response to the driver he has been assigned
+
+request
+{
+	answer: String (Accepted/Declined)
+}
+response:
+{
+}
+
+
+GET /rides-offers
+
+Endpoint called by the drivers to choose a client to pick up for the ride
+
+response:
+{[
+{
+	clientName: String,
+	distance: String (2km),
+	id: Int
+},
+{
+clientName: String,
+	distance: String (5km),
+	id: Int
+}
+]}
+
+GET /rides-offers/{id}/status
+
+Endpoint called the driver to get back status of ride (if the client accepted or not)
+
+response:
+{
+	answer: String(Pending/Accepted/Declined)
+}
+
+
+
+
+
+
+POST /rides-offers/{id}
+
+Endpoint used by the driver to give a response to the user he chose from the list
+
+Decline will happen if driver decides to get out of the list of offers menu, meaning the pending status will change to declined for the user
+
+request:
+{
+	answer:Declined
+}
+or
+request:
+{
+	id: Int
+	answer:Accepted
+coordinates:
+{
+		latitude: Double,
+		longitude: Double,
+}
+}
+
+POST /rides-offers/{id}/finished
+
+Endpoint used by the driver to tell the server that the ride has been completed

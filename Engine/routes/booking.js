@@ -7,7 +7,6 @@ router.get('/:id/', function (req, res) {
   var db = require('../db');
   var Offer = db.Mongoose.model('offer', db.OfferSchema, 'offer');
   Offer.find({_id: id}).lean().exec(function(err, docs) {
-    console.log(docs);
     if(docs.length) {
       res.statusCode = 200;
       res.json({ acceptedByDriver: docs[0].acceptedByDriver});
@@ -48,12 +47,6 @@ router.post('/', function (req, res) {
       res.json({id: newOffer.id});
       res.end();
   });
-
-  // Change
-  // let answer = true;
-
-  // res.statusCode = 200;
-  // res.json('hi');
 });
 
 //Endpoint used by the client give a response to the driver he has been assigned
@@ -67,7 +60,7 @@ router.post("/:id", function(req, res) {
     var Offer = db.Mongoose.model('offer', db.OfferSchema, 'offer');
     Offer.findOneAndUpdate({_id: id}, {acceptedByClient: answer}).lean().exec(function(err, docs){
       if (err) {
-        res.status(500).json({ error: err.message });
+        res.status(400).json("Invalid id");
         res.end();
         return;
       }
