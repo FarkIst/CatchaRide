@@ -2,13 +2,19 @@ const express = require('express');
 const router = express.Router(); // eslint-disable-line new-cap
 
 // Endpoint called by the client to check if a driver has selected his ride offer and wants to pick him up
-router.get('/:bookingId/', function (req, res) {
-  let id = req.params.bookingId;
+router.get('/:id/', function (req, res) {
+  let id = req.params.id;
   var db = require('../db');
   var Offer = db.Mongoose.model('offer', db.OfferSchema, 'offer');
-  Offer.find({_id: id}).lean().exec(function(e,docs) {
-    res.statusCode = 200;
-    res.json({ acceptedByDriver: docs[0].acceptedByDriver});
+  Offer.find({_id: id}).lean().exec(function(err, docs) {
+    console.log(docs);
+    if(docs.length) {
+      res.statusCode = 200;
+      res.json({ acceptedByDriver: docs[0].acceptedByDriver});
+    } else {
+      res.statusCode = 400;
+      res.json("Invalid id");
+    }
     res.end();
   });
 });
@@ -18,15 +24,15 @@ router.post('/', function (req, res) {
   var db = require('../db');
 
   let name = req.body.name;
-  let lat = req.body.coordinates.lat;
-  let lon = req.body.coordinates.lon;
+  let latitude = req.body.coordinates.latitude;
+  let longitude = req.body.coordinates.longitude;
 
   var Offer = db.Mongoose.model('offer', db.OfferSchema, 'offer');
   var newOffer = new Offer({
       clientName: name,
-      coordinates: {
-        latitude: lat,
-        longitude: lon
+      clientCoordinates: {
+        latitude: latitude,
+        longitude: longitude
       },
       acceptedByDriver: "Pending",
       acceptedByClient: "Pending"
@@ -51,20 +57,27 @@ router.post('/', function (req, res) {
 });
 
 //Endpoint used by the client give a response to the driver he has been assigned
-router.post("/:bookingId", function(req, res) {
-  let id = req.params.bookingId;
-  let acceptedByClient = req.body.acceptedByClient;
-  var db = require('../db');
-  var Offer = db.Mongoose.model('offer', db.OfferSchema, 'offer');
-  Offer.findOneAndUpdate({_id: id}, {acceptedByClient: acceptedByClient}).lean().exec(function(e,docs){
-    if (err) {
-      res.status(500).json({ error: err.message });
+router.post("/:id", function(req, res) {
+  let id = req.params.id;
+  let answer = req.body.answer;
+
+
+  if(answer == "Accepted" || answer == "Denied") {
+    var db = require('../db');
+    var Offer = db.Mongoose.model('offer', db.OfferSchema, 'offer');
+    Offer.findOneAndUpdate({_id: id}, {acceptedByClient: answer}).lean().exec(function(err, docs){
+      if (err) {
+        res.status(500).json({ error: err.message });
+        res.end();
+        return;
+      }
+      res.statusCode = 200;
       res.end();
-      return;
-    }
-    res.statusCode = 200;
-    res.end();
-  });
+    });
+  } else {
+    res.statusCode = 400;
+    res.json("Invalid answer");
+  }
 });
 
 

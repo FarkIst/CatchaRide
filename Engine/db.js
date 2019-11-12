@@ -8,7 +8,7 @@ mongoose.connect('mongodb://localhost:27017/catch-a-ride',
 
 var offerSchema = new mongoose.Schema({
     clientName: String,
-    coordinates: {
+    clientCoordinates: {
         latitude: Number,
         longitude: Number
     },
