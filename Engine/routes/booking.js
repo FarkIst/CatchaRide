@@ -14,15 +14,39 @@ router.get('/:bookingId/status', function (req, res) {
 
 // Endpoint called by the client to make a ride offer for the drivers
 router.post('/', function (req, res) {
+  var db = require('../db');
+
   let name = req.body.name;
   let lat = req.body.coordinates.lat;
   let lon = req.body.coordinates.lon;
 
-  // Change
-  let answer = true;
+  var Offer = db.Mongoose.model('offer', db.OfferSchema, 'offer');
+  var newOffer = new Offer({
+      clientName: name,
+      coordinates: {
+        latitude: lat,
+        longitude: lon
+      },
+      acceptedByDriver: "Pending",
+      acceptedByClient: "Pending"
+    }
+  );
 
-  res.statusCode = 200;
-  res.json(answer);
+  newOffer.save(function (err) {
+      if (err) {
+          res.status(500).json({ error: err.message });
+          res.end();
+          return;
+      }
+      res.json({id: newOffer.id});
+      res.end();
+  });
+
+  // Change
+  // let answer = true;
+
+  // res.statusCode = 200;
+  // res.json('hi');
 });
 
 //Endpoint used by the client give a response to the driver he has been assigned
