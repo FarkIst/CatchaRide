@@ -5,28 +5,31 @@ const router = express.Router(); // eslint-disable-line new-cap
 router.get("/", function(req, res) {
   
   var db = require('../db');
-  let results = {};
   var Offer = db.Mongoose.model('offer', db.OfferSchema, 'offer');
-  var offers = Offer.find({}).lean().exec(function(e,docs){
-    res.statusCode = 200;
-    if (docs){
-    docs = docs.map(function (obj) {
-      return {
-        id: obj._id,
-        clientName: obj.clientName,
-        distance: getDistanceFromLatLonInKm(
-          obj.clientCoordinates.latitude,
-          obj.clientCoordinates.longitude,
-          req.query.latitude,
-          req.query.longitude
-        ) + "km"
+  var offers = Offer.find({}, { "clients.$": 1, _id: 0 })
+    .lean()
+    .exec(function(e, docs) {
+      res.statusCode = 200;
+      if (docs) {
+        docs = docs.map(function(obj) {
+          return {
+            id: obj._id,
+            clientName: obj.clientName,
+            distance:
+              getDistanceFromLatLonInKm(
+                obj.clientCoordinates.latitude,
+                obj.clientCoordinates.longitude,
+                req.query.latitude,
+                req.query.longitude
+              ) + "km"
+          };
+        });
       }
-    })};
-     results.clients = docs;
-  });
+        res.json({clients: docs});
+        res.end();
+    });
 
-  res.json(results);
-  res.end();
+
 });
 
 // Endpoint called the driver to get back status of ride (if the client accepted or not)
