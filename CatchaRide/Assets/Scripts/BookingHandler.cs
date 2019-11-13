@@ -69,22 +69,27 @@ public class BookingHandler : MonoBehaviour
     {
         string uri = "http://localhost:3001/api/ride-offers";
 
-        RestClient.Get<test>(uri).Then(res =>
+
+        RestClient.GetArray<test>(uri).Then(res =>
         {
-            Debug.Log("CLIENT NAME :" + res.clientName);
+            Debug.Log("RES: " + res);
+            string t = JsonHelper.ArrayToJsonString<test>(res, true);
+            Debug.Log("CLIENT NAME :" + res[0].clientName);
+            Debug.Log("SSS: " + t);
         });
+    }
+
+    public void AcceptBooking()
+    {
+        string uri = "";
+        //RestClient.Put<Driver>(uri, 
+        //    );
     }
 
 }
 
 
-[Serializable]
-public class test
-{
-    public string id;
-    public string clientName;
-    public string distance;
-}
+
 
 ////Debug
 //public void PrintClient()
