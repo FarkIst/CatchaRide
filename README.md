@@ -15,6 +15,7 @@
 * Does our sub-systems utilize an asynchronous communication between them? (...) 
 
 * What EIPs do we make use of? 
+
 We make use of an point-to-point channel and Message Channel between the customer and driver for our requested and received data via an NodeJS Express Server that acts as a Middleware. 
 We use this to execute the code, make changes to the request and response objects, and most notably to call the next middleware in the stack. 
 
