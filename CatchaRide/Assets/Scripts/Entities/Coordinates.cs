@@ -5,7 +5,7 @@ namespace Entities
     [Serializable]
     public class Coordinates
     {
-        public double Latitude, Longitude;
+        public double latitude, longitude;
     }
 }
 
