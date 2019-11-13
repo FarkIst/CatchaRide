@@ -6,14 +6,14 @@ namespace Entities
     [Serializable]
     public class ClientContainer
     {
-        public List<Client> Clients;
+        public List<client> clients;
     }
 
     [Serializable]
-    public class Client
+    public class client
     {
         public string id;
-        public string name;
+        public string clientName;
         public string Status;
         public Coordinates Coordinates;
     }

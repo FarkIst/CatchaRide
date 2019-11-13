@@ -63,9 +63,9 @@ public class TestSocketIO : MonoBehaviour
     {
         Debug.Log(obj.data);
         string jString = obj.data.ToString();
-        Client client = JsonUtility.FromJson<Client>(jString);
+        client client = JsonUtility.FromJson<client>(jString);
 
-        Debug.Log(client.name + " ___" + client.id);
+        Debug.Log(client.clientName + " ___" + client.id);
     }
 
     private IEnumerator HandleSocketCalls()
@@ -75,9 +75,9 @@ public class TestSocketIO : MonoBehaviour
 
         socket.Emit("availableclients");
 
-        Client client = new Client
+        client client = new client
         {
-            name = "far",
+            clientName = "far",
             id = "1"
         };
         string jsonString = JsonUtility.ToJson(client);

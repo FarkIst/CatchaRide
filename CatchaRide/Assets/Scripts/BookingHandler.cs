@@ -50,10 +50,10 @@ public class BookingHandler : MonoBehaviour
     {
         string path = basePath + "/booking";
 
-        RestClient.Post<Client>(path,
-           new Client
+        RestClient.Post<client>(path,
+           new client
            {
-               name = "Farkisssss",
+               clientName = "Farkisssss",
                //Status = "Awesome",
                Coordinates = new Coordinates
                {
