@@ -12,7 +12,8 @@ namespace Entities
     [Serializable]
     public class Client
     {
-        public string Name;
+        public string id;
+        public string name;
         public string Status;
         public Coordinates Coordinates;
     }

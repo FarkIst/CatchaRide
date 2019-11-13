@@ -5,14 +5,16 @@ using UnityEditor;
 using UnityEngine;
 using Entities;
 using System.IO;
+using System;
 
 public class BookingHandler : MonoBehaviour
 {
     private double _latitude, _longitude;
     [SerializeField] private LocationHandler _locationHandler;
+    [SerializeField] private GameObject _passangerUI, _contentContainer;
 
     RequestHelper currentRequest;
-    string basePath = "";
+    string basePath = "http://localhost:3001/api";
 
 
     private void LogMessage(string title, string message)
@@ -30,64 +32,59 @@ public class BookingHandler : MonoBehaviour
     {
         if (!_locationHandler)
             _locationHandler = FindObjectOfType<LocationHandler>();
+
+        _latitude = 45.121221;
+        _longitude = 22.1111;
     }
 
     // Update is called once per frame
     void Update()
     {
-        _latitude = _locationHandler.Latitude;
-        _longitude = _locationHandler.Longitude;
+        //_latitude = _locationHandler.Latitude;
+        //_longitude = _locationHandler.Longitude;
     }
 
 
     //Post method
     public void CreateBooking()
     {
-       
-        currentRequest = new RequestHelper
-        {
-            Uri = basePath + "/posts",
+        string path = basePath + "/booking";
 
-            Body = new Client
-            {
-                Name = "",
-                Status = "",
-                Coordinates = new Coordinates
-                {
-                   Latitude = _latitude,
-                   Longitude = _longitude
-                }
-            },
-            EnableDebug = true
-        };
-        RestClient.Post<ClientContainer>(currentRequest)
-        .Then(res => {
-
-            // And later we can clear the default query string params for all requests
-            RestClient.ClearDefaultParams();
-
-            this.LogMessage("Success", JsonUtility.ToJson(res, true));
-        })
-        .Catch(err => this.LogMessage("Error", err.Message));
+        RestClient.Post<Client>(path,
+           new Client
+           {
+               name = "Farkisssss",
+               //Status = "Awesome",
+               Coordinates = new Coordinates
+               {
+                   latitude = _latitude,
+                   longitude = _longitude
+               }
+           });
     }
 
 
     //Get Method
-    public List<Client> GetAllClients()
+    public void GetAllClients()
     {
-        List<Client> _clients = new List<Client>();
-        RestClient.Get<ClientContainer>(basePath).Then(res =>
+        string uri = "http://localhost:3001/api/ride-offers";
+
+        RestClient.Get<test>(uri).Then(res =>
         {
-            foreach(Client c in res.Clients)
-            {
-                _clients.Add(c);
-            }
+            Debug.Log("CLIENT NAME :" + res.clientName);
         });
-        return _clients;
     }
 
 }
 
+
+[Serializable]
+public class test
+{
+    public string id;
+    public string clientName;
+    public string distance;
+}
 
 ////Debug
 //public void PrintClient()
