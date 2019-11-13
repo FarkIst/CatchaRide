@@ -28,7 +28,34 @@ io.sockets.on("connection", function(socket) {
       console.info(`Client has left: ` +socket.id);
     });
 
-    
+  socket.on("availableclients", () => {
+  var db = require("./db");
+  var Offer = db.Mongoose.model("offer", db.OfferSchema, "offer");
+  var offers = Offer.find({}, { "clients.$": 1, _id: 0 })
+    .lean()
+    .exec(function(e, docs) {
+      res.statusCode = 200;
+      if (docs) {
+        docs = docs.map(function(obj) {
+          return {
+            id: obj._id,
+            clientName: obj.clientName,
+            distance:
+              getDistanceFromLatLonInKm(
+                obj.clientCoordinates.latitude,
+                obj.clientCoordinates.longitude,
+                req.query.latitude,
+                req.query.longitude
+              ) + "km"
+          };
+        });
+      }
+         let jsonArr = { clients: docs };
+      socket.emit("returnavailableclients", {
+        clients: jsonArr,
+      });
+    });
+    })
 
 });
 
