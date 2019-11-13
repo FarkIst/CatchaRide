@@ -29,6 +29,9 @@
 using System.Collections;
 using UnityEngine;
 using SocketIO;
+using Entities;
+using System;
+using Proyecto26;
 
 public class TestSocketIO : MonoBehaviour
 {
@@ -40,45 +43,44 @@ public class TestSocketIO : MonoBehaviour
 		socket = go.GetComponent<SocketIOComponent>();
 
 		socket.On("open", TestOpen);
-        socket.On("testme", TestAccept);
 		socket.On("boop", TestBoop);
 		socket.On("error", TestError);
 		socket.On("close", TestClose);
+        socket.On("sendinfotounity", TestSendInfo);
 		
 		StartCoroutine("BeepBoop");
 	}
 
-	private IEnumerator BeepBoop()
-	{
-        
-		// wait 1 seconds and continue
-		yield return new WaitForSeconds(1);
-        socket.Emit("testme");
-        socket.Emit("beep");
-        Debug.Log("SUPPOSED TO BE RUNNING NOW");
-
-        // wait 3 seconds and continue
-        yield return new WaitForSeconds(3);
-		
-		socket.Emit("beep");
-		
-		// wait 2 seconds and continue
-		yield return new WaitForSeconds(2);
-		
-		socket.Emit("beep");
-		
-		// wait ONE FRAME and continue
-		yield return null;
-
-        socket.Emit("beep");
-        socket.Emit("beep");
-    }
-
-
-    public void TestAccept(SocketIOEvent e)
+    private void TestSendInfo(SocketIOEvent obj)
     {
-        Debug.Log("[SocketIO] Something happening: " + e.name + " " + e.data);
+        Debug.Log(obj.data);
+        string jString = obj.data.ToString();
+        Client client = JsonUtility.FromJson<Client>(jString);
+
+        Debug.Log(client.name + " ___" + client.id);
     }
+
+    private IEnumerator HandleSocketCalls()
+    {
+        // wait 1 seconds and continue
+        yield return new WaitForSeconds(1);
+
+        socket.Emit("beep");
+
+        Client client = new Client
+        {
+            name = "far",
+            id = "1"
+        };
+        string jsonString = JsonUtility.ToJson(client);
+
+        JSONObject jSONObject = new JSONObject();
+        jSONObject.AddField("name", "Farki");
+        jSONObject.AddField("id", 1);
+
+
+        socket.Emit("sendinfotoserver", jSONObject);        
+	}
 
 	public void TestOpen(SocketIOEvent e)
 	{
