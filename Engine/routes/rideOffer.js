@@ -6,7 +6,7 @@ router.get("/", function(req, res) {
   
   var db = require('../db');
   var Offer = db.Mongoose.model('offer', db.OfferSchema, 'offer');
-  var offers = Offer.find({}, { "clients.$": 1, _id: 0 })
+  var offers = Offer.find({})
     .lean()
     .exec(function(e, docs) {
       res.statusCode = 200;

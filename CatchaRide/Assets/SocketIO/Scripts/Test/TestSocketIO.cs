@@ -47,9 +47,17 @@ public class TestSocketIO : MonoBehaviour
 		socket.On("error", TestError);
 		socket.On("close", TestClose);
         socket.On("sendinfotounity", TestSendInfo);
+        socket.On("returnavailableclients", GetAllClients);
 		
-		StartCoroutine("BeepBoop");
+		StartCoroutine("HandleSocketCalls");
 	}
+
+    private void GetAllClients(SocketIOEvent e)
+    {
+        Debug.Log(e.data);
+
+        
+    }
 
     private void TestSendInfo(SocketIOEvent obj)
     {
@@ -65,7 +73,7 @@ public class TestSocketIO : MonoBehaviour
         // wait 1 seconds and continue
         yield return new WaitForSeconds(1);
 
-        socket.Emit("beep");
+        socket.Emit("availableclients");
 
         Client client = new Client
         {
