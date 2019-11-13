@@ -50,14 +50,15 @@ public class TestSocketIO : MonoBehaviour
 
 	private IEnumerator BeepBoop()
 	{
-        socket.Emit("testme");
+        
 		// wait 1 seconds and continue
 		yield return new WaitForSeconds(1);
-		
-		socket.Emit("beep");
-		
-		// wait 3 seconds and continue
-		yield return new WaitForSeconds(3);
+        socket.Emit("testme");
+        socket.Emit("beep");
+        Debug.Log("SUPPOSED TO BE RUNNING NOW");
+
+        // wait 3 seconds and continue
+        yield return new WaitForSeconds(3);
 		
 		socket.Emit("beep");
 		
@@ -68,10 +69,10 @@ public class TestSocketIO : MonoBehaviour
 		
 		// wait ONE FRAME and continue
 		yield return null;
-		
-		socket.Emit("beep");
-		socket.Emit("beep");
-	}
+
+        socket.Emit("beep");
+        socket.Emit("beep");
+    }
 
 
     public void TestAccept(SocketIOEvent e)

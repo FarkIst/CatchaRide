@@ -9,7 +9,7 @@ router.get("/", function(req, res) {
   var Offer = db.Mongoose.model('offer', db.OfferSchema, 'offer');
   var offers = Offer.find({}).lean().exec(function(e,docs){
     res.statusCode = 200;
-    if (docs.length > 0){
+    if (docs){
     docs = docs.map(function (obj) {
       return {
         id: obj._id,
