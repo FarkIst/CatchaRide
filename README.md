@@ -20,8 +20,9 @@ Simply put:
 * Message Channel 
 * Request/Reply pattern 
 * RPC
-* (Events)
+* Events
 * Invalid Message
+* Adapter -> Client and Customer application.
 
 
 ##### Middleware 
