@@ -18,9 +18,8 @@ We're using two integration platforms, BPNM and (MOM) by utilizing NodeJS.
 Simply put: 
 
 * Point-to-Point, one client per reservation
-* Request/Reply pattern
-* (Adapter) 
-* History, call and organize list of ID, clients/orders
+* Request/Reply pattern 
+* RPC
 * (Events)
 * Invalid Message
 
