@@ -11,18 +11,19 @@
 
 ##### B. Software Implementation: 
 * Integration Platform: 
-We're using two integration platforms, BPNM and MOM by utilizing NodeJS.
+We're using two integration platforms, BPNM and (MOM) by utilizing NodeJS.
 
 * What EIPs do we make use of? 
 
 Simply put: 
-Point-to-Point 
-Request/Reply
-(Adapter)
-History
-(Events)
 
-- 
+* Point-to-Point, one client per reservation
+* Request/Reply pattern
+* (Adapter) 
+* History, call and organize list of ID, clients/orders
+* (Events)
+
+
 ##### Middleware 
 
 We make use of an point-to-point channel between the customer and driver for our requested and received data via an NodeJS Express Server that acts as a Middleware. 
@@ -32,4 +33,3 @@ We use this to execute the code, make changes to the request and response object
 
 Our Route Middleware takes care of the GET and POST requests routes, to receive an ID and Name of the client or clientlist and successful confirmation order. 
 
-##### Installation Instructions: 
