@@ -22,6 +22,7 @@ Simply put:
 * (Adapter) 
 * History, call and organize list of ID, clients/orders
 * (Events)
+* Invalid Message
 
 
 ##### Middleware 
